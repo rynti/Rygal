@@ -18,6 +18,8 @@ import org.rygal.graphic.Texture;
  * @author Robert Böhm
  */
 class QueueingBitmapCanvas extends BasicCanvas {
+	
+	private var _tilesheetManager:TilesheetManager;
     
     /** The bitmap data this canvas is based on. */
     private var _bitmapData:BitmapData;
@@ -32,7 +34,7 @@ class QueueingBitmapCanvas extends BasicCanvas {
         super();
         
         this._bitmapData = bitmapData;
-        
+        this._tilesheetManager = new TilesheetManager();
         this._baseQueue = new DrawQueue(0);
         this._drawPoint = new Point();
     }
@@ -67,10 +69,8 @@ class QueueingBitmapCanvas extends BasicCanvas {
         var queue:DrawQueue = _baseQueue.findFirst();
         while (queue != null) {
             for (k in queue.drawTileCalls.keys()) {
-                var tilesheet:Tilesheet = TilesheetManager.get(k);
-                
-                var bitmapData:BitmapData = BitmapDataManager.getBitmapData(k);
-                var tilesheet:ManagedTilesheet = TilesheetManager.get(k);
+                var bitmapData:BitmapData = _tilesheetManager.getBitmapData(k);
+                var tilesheet:ManagedTilesheet = _tilesheetManager.get(k);
                 var tileData:Array<Float> = queue.drawTileCalls.get(k);
                 var i:Int = 0;
                 while (i < tileData.length) {
@@ -90,6 +90,7 @@ class QueueingBitmapCanvas extends BasicCanvas {
             
             queue = queue.nextQueue;
         }
+		this._tilesheetManager.clear();
     }
     
     override public function clear(color:Int = 0):Void {
@@ -103,20 +104,14 @@ class QueueingBitmapCanvas extends BasicCanvas {
         x += xTranslation;
         y += yTranslation;
         z += zTranslation;
+		var bitmapId:Int = _tilesheetManager.requestIdentifier(texture.bitmapData);
         var tileCalls:IntHash<Array<Float>> = _baseQueue.findQueue(z).drawTileCalls;
-        if (!tileCalls.exists(texture.bitmapDataIdentifier))
-            tileCalls.set(texture.bitmapDataIdentifier, new Array<Float>());
-        var tileData:Array<Float> = tileCalls.get(texture.bitmapDataIdentifier);
+        if (!tileCalls.exists(bitmapId))
+            tileCalls.set(bitmapId, new Array<Float>());
+        var tileData:Array<Float> = tileCalls.get(bitmapId);
         tileData.push(Std.int(x));
         tileData.push(Std.int(y));
-        tileData.push(texture.tileIdIdentifier);
-        
-        
-        /*_drawPoint.x = x;
-        _drawPoint.y = y;
-        
-        _bitmapData.copyPixels(texture.bitmapData, texture.bitmapDataRect,
-            _drawPoint, null, null, true);*/
+        tileData.push(_tilesheetManager.requestTileId(bitmapId, texture.bitmapDataRect));
     }
     
     override public function setPixel(x:Int, y:Int, color:Int):Void {

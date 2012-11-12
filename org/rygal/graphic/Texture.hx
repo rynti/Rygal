@@ -40,12 +40,6 @@ import nme.utils.ByteArray;
  */
 class Texture {
     
-    /** The identifier for the used bitmap data. */
-    public var bitmapDataIdentifier(default, null):Int;
-    
-    /** The identifier for the used tile. */
-    public var tileIdIdentifier(default, null):Int;
-    
     /** The width of this texture. */
     public var width(getWidth, never):Int;
     
@@ -71,9 +65,6 @@ class Texture {
             bitmapDataRect = bitmapData.rect;
         
         this.bitmapDataRect = bitmapDataRect;
-        
-        this.bitmapDataIdentifier = BitmapDataManager.allocBitmapData(this.bitmapData);
-        this.tileIdIdentifier = TilesheetManager.requestTileId(this.bitmapDataIdentifier, this.bitmapDataRect);
     }
     
     
@@ -128,14 +119,6 @@ class Texture {
         return canvas.toTexture();
     }
     
-    
-    /**
-     * Frees this Texture-object and allows the internal bitmap data to be disposed as well if it's
-     * not used anymore.
-     */
-    public function dispose():Void {
-        BitmapDataManager.freeBitmapData(bitmapData);
-    }
     
     /**
      * Returns a sliced version of this texture.

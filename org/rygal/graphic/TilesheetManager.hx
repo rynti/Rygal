@@ -18,6 +18,7 @@
 
 package org.rygal.graphic;
 
+import nme.display.BitmapData;
 import nme.display.Tilesheet;
 import nme.geom.Point;
 import nme.geom.Rectangle;
@@ -32,26 +33,61 @@ import nme.geom.Rectangle;
  */
 class TilesheetManager {
     
-    private static var tilesheets:IntHash<ManagedTilesheet> = new IntHash<ManagedTilesheet>();
+    private var bitmapDatas:Array<BitmapData>;
+    private var tilesheets:Array<ManagedTilesheet>;
     
-    /** TilesheetManager is not instanceable! */
-    private function new() { }
+    public function new() {
+		this.bitmapDatas = new Array<BitmapData>();
+		this.tilesheets = new Array<ManagedTilesheet>();
+	}
     
-    public static function requestTileId(id:Int, rectangle:Rectangle, centerPoint:Point = null):Int {
-        if (!tilesheets.exists(id)) {
-            tilesheets.set(id, new ManagedTilesheet(BitmapDataManager.getBitmapData(id)));
+    public function clear():Void {
+		bitmapDatas = new Array<BitmapData>();
+        tilesheets = new Array<ManagedTilesheet>();
+    }
+    
+    /**
+     * Allocates the given bitmap data so the identifier will be valid until you free the bitmap
+     * data.
+     * 
+     * @return  A valid identifier for the given bitmap data.
+     */
+    public function requestIdentifier(bitmapData:BitmapData):Int {
+        for (i in 0...bitmapDatas.length) {
+            if (bitmapDatas[i] == bitmapData) {
+                return i;
+            }
         }
-        var tilesheet:ManagedTilesheet = tilesheets.get(id);
-        return tilesheet.requestTileRect(rectangle, centerPoint);
+		tilesheets.push(new ManagedTilesheet(bitmapData));
+		return bitmapDatas.push(bitmapData) - 1;
     }
     
-    public static function get(id:Int):ManagedTilesheet {
-        return tilesheets.get(id);
+    /**
+     * Returns the bitmap data for the given identifier.
+     */
+    public function getBitmapData(identifier:Int):BitmapData {
+        return bitmapDatas[identifier];
     }
     
-    public static function free(id:Int):Void {
-        if (tilesheets.exists(id))
-            tilesheets.remove(id);
+    /**
+     * Returns the identifier for the given bitmap data or -1 if it doesn't exist.
+     */
+    public function getIdentifier(bitmapData:BitmapData):Int {
+        // TODO: This method may not be required!
+        for (i in 0...bitmapDatas.length) {
+            if (bitmapDatas[i] == bitmapData) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public function requestTileId(id:Int, rectangle:Rectangle, centerPoint:Point = null):Int {
+        return tilesheets[id].requestTileRect(rectangle, centerPoint);
+    }
+    
+    public function get(id:Int):ManagedTilesheet {
+        return tilesheets[id];
     }
     
 }

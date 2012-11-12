@@ -448,9 +448,6 @@ class Label extends BasicGameObject {
         if (metrics.height == 0) {
             metrics = new Rectangle(metrics.x, metrics.y, metrics.width, 1);
         }
-        if (_canvas != null) {
-            _canvas.toTexture().dispose();
-        }
         _canvas = new BitmapCanvas(new BitmapData(
             Std.int(metrics.width), Std.int(metrics.height)));
     }

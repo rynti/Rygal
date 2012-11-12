@@ -26,6 +26,7 @@ import nme.events.Event;
 import nme.Lib;
 import org.rygal.graphic.BitmapCanvas;
 import org.rygal.graphic.Canvas;
+import org.rygal.graphic.QueueingBitmapCanvas;
 import org.rygal.input.DeviceManager;
 import org.rygal.input.InputDevice;
 import org.rygal.input.JoystickDeviceManager;
@@ -182,7 +183,7 @@ class Game {
         _sprite.addChild(_bitmap);
         
         this._pauseScene = new DefaultPauseScene();
-        this.screen = new BitmapCanvas(_bitmap.bitmapData);
+        this.screen = new QueueingBitmapCanvas(_bitmap.bitmapData);
         this.zoom = zoom;
         this.width = width;
         this.height = height;
