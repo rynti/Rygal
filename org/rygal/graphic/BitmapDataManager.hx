@@ -30,6 +30,7 @@ import nme.display.BitmapData;
  */
 class BitmapDataManager {
     
+    public static var size(default, null):Int = 0;
     private static var nextIdentifier:Int = 0;
     private static var bitmapDatas:IntHash<BitmapData> = new IntHash<BitmapData>();
     private static var allocations:IntHash<Int> = new IntHash<Int>();
@@ -46,6 +47,7 @@ class BitmapDataManager {
     public static function allocBitmapData(bitmapData:BitmapData):Int {
         var identifier:Int = getIdentifier(bitmapData);
         if (identifier < 0) {
+            size++;
             bitmapDatas.set(nextIdentifier, bitmapData);
             allocations.set(nextIdentifier, 0);
             return nextIdentifier++;
@@ -63,9 +65,10 @@ class BitmapDataManager {
         if (identifier >= 0) {
             allocations.set(identifier, allocations.get(identifier) - 1);
             if (allocations.get(identifier) <= 0) {
-                bitmapData.dispose();
+                size--;
                 bitmapDatas.remove(identifier);
                 allocations.remove(identifier);
+                TilesheetManager.free(identifier);
             }
         }
     }

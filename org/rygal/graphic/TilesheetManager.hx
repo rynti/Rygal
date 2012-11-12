@@ -49,4 +49,9 @@ class TilesheetManager {
         return tilesheets.get(id);
     }
     
+    public static function free(id:Int):Void {
+        if (tilesheets.exists(id))
+            tilesheets.remove(id);
+    }
+    
 }

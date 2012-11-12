@@ -161,7 +161,25 @@ class Texture {
      * @return  A canvas with the same bitmap data as this texture.
      */
     public function toCanvas():Canvas {
-        return new BitmapCanvas(this.clone().bitmapData);
+        return new BitmapCanvas(this.cloneBitmapData());
+    }
+    
+    /**
+     * Duplicates the bitmap data. Modifications on the new bitmap data won't affect
+     * this one and vice versa.
+     * 
+     * @return  The duplicated bitmap data.
+     */
+    public function cloneBitmapData():BitmapData {
+        #if js
+        var data:BitmapData = new BitmapData(width, height);
+        #else
+        var data:BitmapData = new BitmapData(width, height,
+            bitmapData.transparent);
+        #end
+        
+        data.copyPixels(bitmapData, bitmapDataRect, new Point());
+        return data;
     }
     
     /**
@@ -171,15 +189,7 @@ class Texture {
      * @return  The duplicated texture.
      */
     public function clone():Texture {
-        #if js
-        var data:BitmapData = new BitmapData(width, height);
-        #else
-        var data:BitmapData = new BitmapData(width, height,
-            bitmapData.transparent);
-        #end
-        
-        data.copyPixels(bitmapData, bitmapDataRect, new Point());
-        return new Texture(data);
+        return new Texture(cloneBitmapData());
     }
     
     
