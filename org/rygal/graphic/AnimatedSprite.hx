@@ -61,9 +61,10 @@ class AnimatedSprite extends Sprite {
      * 
      * @param   x   The initial x-coordinate.
      * @param   y   The initial y-coordinate.
+     * @param   z   The initial z-coordinate.
      */
-    public function new(x:Float = 0, y:Float = 0) {
-        super(null, x, y);
+    public function new(x:Float = 0, y:Float = 0, z:Int = 0) {
+        super(null, x, y, z);
         
         _animations = new Hash<Animation>();
     }

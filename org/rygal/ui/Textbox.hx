@@ -105,7 +105,7 @@ class Textbox extends BasicGameObject {
     private var _caretVisible:Bool;
     
     /** The time until the next blink of the caret. */
-    private var _nextCaretBlink:Int;
+    private var _nextCaretBlink:Float;
     
     /** The metrics of this textbox. */
     private var _metrics:Rectangle;

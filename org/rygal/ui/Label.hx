@@ -26,11 +26,13 @@ import nme.text.TextField;
 import nme.text.TextFieldAutoSize;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
+import org.rygal.graphic.BitmapCanvas;
 import org.rygal.graphic.BitmapFont;
 import org.rygal.graphic.Canvas;
 import org.rygal.graphic.EmbeddedFont;
 import org.rygal.graphic.Font;
 import org.rygal.BasicGameObject;
+import org.rygal.graphic.Texture;
 import org.rygal.physics.Rectangle;
 
 /**
@@ -446,7 +448,9 @@ class Label extends BasicGameObject {
         if (metrics.height == 0) {
             metrics = new Rectangle(metrics.x, metrics.y, metrics.width, 1);
         }
-        _canvas = new Canvas(new BitmapData(
+        if (_canvas != null) {
+        }
+        _canvas = new BitmapCanvas(new BitmapData(
             Std.int(metrics.width), Std.int(metrics.height)));
     }
     

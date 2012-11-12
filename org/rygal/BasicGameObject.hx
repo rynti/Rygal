@@ -37,6 +37,9 @@ class BasicGameObject extends EventDispatcher, implements GameObject {
     /** The y-coordinate of this object. */
     public var y:Float;
     
+    /** The z-coordinate of this object. */
+    public var z:Int;
+    
     /** The parent of this object. */
     public var parent:GameObject;
     
@@ -44,11 +47,12 @@ class BasicGameObject extends EventDispatcher, implements GameObject {
     /**
      * Creates a new basic game object.
      */
-    private function new(x:Float = 0, y:Float = 0) {
+    private function new(x:Float = 0, y:Float = 0, z:Int = 0) {
         super();
         
         this.x = x;
         this.y = y;
+        this.z = z;
         this.parent = null;
     }
     
@@ -68,6 +72,15 @@ class BasicGameObject extends EventDispatcher, implements GameObject {
      */
     public function getAbsoluteY():Float {
         return parent != null ? this.y + parent.y : this.y;
+    }
+    
+    /**
+     * Returns the absolute z-coordinate of this object.
+     * 
+     * @return  The absolute z-coordinate of this object.
+     */
+    public function getAbsoluteZ():Int {
+        return parent != null ? this.z + parent.z : this.z;
     }
     
     /**

@@ -37,6 +37,9 @@ interface GameObject {
     /** The y-coordinate of this object. */
     public var y:Float;
     
+    /** The z-coordinate of this object. */
+    public var z:Int;
+    
     /** The parent of this object. */
     public var parent:GameObject;
     
@@ -54,6 +57,13 @@ interface GameObject {
      * @return  The absolute y-coordinate of this object.
      */
     public function getAbsoluteY():Float;
+    
+    /**
+     * Returns the absolute z-coordinate of this object.
+     * 
+     * @return  The absolute z-coordinate of this object.
+     */
+    public function getAbsoluteZ():Int;
     
     /**
      * Updates this object and executes game logic.

@@ -24,6 +24,7 @@ import nme.display.DisplayObject;
 import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
+import org.rygal.graphic.BitmapCanvas;
 import org.rygal.graphic.Canvas;
 import org.rygal.input.DeviceManager;
 import org.rygal.input.InputDevice;
@@ -181,7 +182,7 @@ class Game {
         _sprite.addChild(_bitmap);
         
         this._pauseScene = new DefaultPauseScene();
-        this.screen = new Canvas(_bitmap.bitmapData);
+        this.screen = new BitmapCanvas(_bitmap.bitmapData);
         this.zoom = zoom;
         this.width = width;
         this.height = height;
@@ -562,10 +563,12 @@ class Game {
     private function draw():Void {
         this.screen.translate(Std.int(-cameraX), Std.int(-cameraY));
         if (_currentScene != null) _currentScene.draw(this.screen);
+        this.screen.executeQueue();
         this.screen.reset();
         
         if (this._paused) {
             if (_pauseScene != null) _pauseScene.draw(this.screen);
+            this.screen.executeQueue();
         }
     }
     

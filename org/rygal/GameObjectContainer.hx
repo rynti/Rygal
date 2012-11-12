@@ -38,6 +38,9 @@ class GameObjectContainer implements GameObject {
     /** The y-coordinate of this container. */
     public var y:Float;
     
+    /** The z-coordinate of this container. */
+    public var z:Int;
+    
     /** The parent of this object. */
     public var parent:GameObject;
     
@@ -52,6 +55,7 @@ class GameObjectContainer implements GameObject {
     public function new() {
         this.x = 0;
         this.y = 0;
+        this.z = 0;
         _children = new Array<GameObject>();
     }
     
@@ -72,6 +76,15 @@ class GameObjectContainer implements GameObject {
      */
     public function getAbsoluteY():Float {
         return parent != null ? this.y + parent.y : this.y;
+    }
+    
+    /**
+     * Returns the absolute z-coordinate of this object.
+     * 
+     * @return  The absolute z-coordinate of this object.
+     */
+    public function getAbsoluteZ():Int {
+        return parent != null ? this.z + parent.z : this.z;
     }
     
     /**
@@ -157,7 +170,7 @@ class GameObjectContainer implements GameObject {
      */
     public function draw(screen:Canvas):Void {
         screen.push();
-        screen.translate(this.x, this.y);
+        screen.translate(this.x, this.y, this.z);
         for (child in _children) {
             child.draw(screen);
         }

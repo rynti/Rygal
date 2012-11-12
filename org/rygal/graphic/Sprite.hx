@@ -61,12 +61,13 @@ class Sprite extends BasicGameObject, implements PhysicalObject {
      * @param   texture         The texture this sprite will be based on.
      * @param   x               The x-coordinate of this sprite.
      * @param   y               The y-coordinate of this sprite.
+     * @param   z               The z-coordinate of this sprite.
      * @param   boundOffsets    The offsets from the sides used for the
      *                          collision bounding box.
      */
-    public function new(texture:Texture, x:Float = 0, y:Float = 0,
+    public function new(texture:Texture, x:Float = 0, y:Float = 0, z:Int = 0,
             boundOffsets:Rectangle = null) {
-        super(x, y);
+        super(x, y, z);
         
         this.boundOffsets = boundOffsets;
         this.texture = texture;

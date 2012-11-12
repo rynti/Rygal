@@ -18,6 +18,7 @@
 
 package org.rygal;
 
+import org.rygal.graphic.BitmapCanvas;
 import org.rygal.graphic.Canvas;
 import org.rygal.graphic.Sprite;
 import org.rygal.input.MouseEvent;
@@ -51,7 +52,7 @@ class DefaultPauseScene extends Scene {
         
         game.mouse.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
         
-        var c:Canvas = Canvas.create(game.width, game.height, true, 0x55000000);
+        var c:Canvas = BitmapCanvas.create(game.width, game.height, true, 0x55000000);
         this.addChild(new Sprite(c.toTexture()));
     }
     
