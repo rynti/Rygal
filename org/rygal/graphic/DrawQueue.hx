@@ -17,6 +17,7 @@
 
 
 package org.rygal.graphic;
+import haxe.FastList;
 
 /**
  * ...
@@ -29,9 +30,11 @@ class DrawQueue {
     public var nextQueue:DrawQueue;
     
     public var drawTileCalls:IntHash<Array<Float>>;
+	public var drawOperations:List<DrawOperation>;
 
     public function new(z:Int, ?previousQueue:DrawQueue, ?nextQueue:DrawQueue) {
         this.drawTileCalls = new IntHash<Array<Float>>();
+		this.drawOperations = new List<DrawOperation>();
         this.z = z;
         if (previousQueue != null) {
             this.previousQueue = previousQueue;

@@ -27,6 +27,7 @@ import nme.Lib;
 import org.rygal.graphic.BitmapCanvas;
 import org.rygal.graphic.Canvas;
 import org.rygal.graphic.QueueingBitmapCanvas;
+import org.rygal.graphic.QueueingSpriteCanvas;
 import org.rygal.input.DeviceManager;
 import org.rygal.input.InputDevice;
 import org.rygal.input.JoystickDeviceManager;
@@ -177,13 +178,14 @@ class Game {
         _deviceManagers = new Array<DeviceManager>();
         _scenes = new Hash<Scene>();
         
-        _bitmap = new Bitmap(new BitmapData(width, height));
-        _bitmap.scaleX = _bitmap.scaleY = zoom;
+        _bitmap = new Bitmap(new BitmapData(width, height, true, 0));
         _sprite = new Sprite();
+        _sprite.scaleX = _sprite.scaleY = zoom;
         _sprite.addChild(_bitmap);
         
         this._pauseScene = new DefaultPauseScene();
-        this.screen = new QueueingBitmapCanvas(_bitmap.bitmapData);
+        this.screen = new QueueingSpriteCanvas(this._sprite);
+        //this.screen = new QueueingBitmapCanvas(_bitmap.bitmapData);
         this.zoom = zoom;
         this.width = width;
         this.height = height;

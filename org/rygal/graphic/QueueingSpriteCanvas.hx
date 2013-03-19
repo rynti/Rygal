@@ -1,8 +1,10 @@
 package org.rygal.graphic;
 
+import nme.display.Bitmap;
 import nme.display.BitmapData;
 import nme.display.DisplayObject;
 import nme.display.IBitmapDrawable;
+import nme.display.SpreadMethod;
 import nme.display.Tilesheet;
 import nme.geom.ColorTransform;
 import nme.geom.Matrix;
@@ -17,25 +19,24 @@ import nme.text.TextFieldAutoSize;
  * ...
  * @author Robert Böhm
  */
-class QueueingBitmapCanvas extends BasicCanvas {
+class QueueingSpriteCanvas extends BasicCanvas {
+    
+    public var sprite:nme.display.Sprite;
 	
 	private var _tilesheetManager:TilesheetManager;
     
-    /** The bitmap data this canvas is based on. */
-    private var _bitmapData:BitmapData;
+    private var _baseQueue:DrawQueue;
     
     /** A pre-allocated point. */
     private var _drawPoint:Point;
     
-    private var _baseQueue:DrawQueue;
-    
 
-    public function new(bitmapData:BitmapData) {
+    public function new(sprite:nme.display.Sprite) {
         super();
         
-        this._bitmapData = bitmapData;
         this._tilesheetManager = new TilesheetManager();
         this._baseQueue = new DrawQueue(0);
+        this.sprite = sprite;
         this._drawPoint = new Point();
     }
     
@@ -66,40 +67,50 @@ class QueueingBitmapCanvas extends BasicCanvas {
     }
     
     override public function executeQueue():Void {
+        while (sprite.numChildren > 0) {
+            sprite.removeChildAt(0);
+        }
+        sprite.graphics.clear();
 		var nop:NMEDrawOperation;
 		var rop:RectangleDrawOperation;
 		var pop:PixelDrawOperation;
+        var s:nme.display.Sprite;
+        var displayObject:DisplayObject;
+        var bData:BitmapData;
         var queue:DrawQueue = _baseQueue.findFirst();
         while (queue != null) {
+            s = new nme.display.Sprite();
             for (k in queue.drawTileCalls.keys()) {
                 var bitmapData:BitmapData = _tilesheetManager.getBitmapData(k);
                 var tilesheet:ManagedTilesheet = _tilesheetManager.getTilesheet(k);
-                var tileData:Array<Float> = queue.drawTileCalls.get(k);
-                var i:Int = 0;
-                while (i < tileData.length) {
-                    _drawPoint.x = tileData[i];
-                    _drawPoint.y = tileData[i + 1];
-                    _bitmapData.copyPixels(bitmapData, tilesheet.tileRects[Std.int(tileData[i + 2])], _drawPoint, null, null, true);
-                    
-                    i += 3;
-                }
+				
+                tilesheet.drawTiles(s.graphics, queue.drawTileCalls.get(k));
                 
                 queue.drawTileCalls.remove(k);
             }
 			for (op in queue.drawOperations) {
 				if (Std.is(op, RectangleDrawOperation)) {
 					rop = cast op;
-					_bitmapData.fillRect(new Rectangle(rop.x, rop.y, rop.width, rop.height), rop.color);
+                    sprite.graphics.beginFill(rop.color);
+                    sprite.graphics.drawRect(rop.x, rop.y, rop.width, rop.height);
+                    sprite.graphics.endFill();
 				} else if (Std.is(op, NMEDrawOperation)) {
+                    sprite.addChild(s);
+                    s = new nme.display.Sprite();
+                    
 					nop = cast op;
-					//_bitmapData.draw(nop.object, nop.matrix, nop.colorTransform, null, nop.clipRect);
+                    sprite.addChild(nop.object);
+					//_bitmapData.draw(nop.source, nop.matrix, nop.colorTransform, null, nop.clipRect);
 				} else if (Std.is(op, PixelDrawOperation)) {
 					pop = cast op;
 					if (inBitmap(pop.x, pop.y)) {
-						_bitmapData.setPixel32(Std.int(pop.x), Std.int(pop.y), pop.color);
+                        sprite.graphics.beginFill(pop.color);
+                        sprite.graphics.drawRect(pop.x, pop.y, 1, 1);
+                        sprite.graphics.endFill();
 					}
 				}
 			}
+            sprite.addChild(s);
 			
 			queue.drawOperations.clear();
             queue = queue.nextQueue;
@@ -108,7 +119,7 @@ class QueueingBitmapCanvas extends BasicCanvas {
     }
     
     override public function clear(color:Int = 0):Void {
-        _bitmapData.fillRect(_bitmapData.rect, color);
+        // TODO: _bitmapData.fillRect(_bitmapData.rect, color);
     }
     
     override public function draw(texture:Texture, x:Float, y:Float, z:Int = 0):Void {
@@ -171,25 +182,30 @@ class QueueingBitmapCanvas extends BasicCanvas {
 		_baseQueue.findQueue(z).drawOperations.add(new RectangleDrawOperation(color, x, y, width, height));
     }
     
-    override public function toTexture():Texture {
+    /*override public function toTexture():Texture {
         return new Texture(_bitmapData);
-    }
+    }*/
     
     override public function drawDisplayObject(object:DisplayObject, ?clipRect:Rectangle, z:Int = 0):Void {
-        /*
-		if (matrix == null) {
+        
+		/*if (matrix == null) {
 			matrix = new Matrix(1, 0, 0, 1, xTranslation, yTranslation);
 		} else {
 			matrix = matrix.clone();
 			matrix.translate(xTranslation, yTranslation);
 		}*/
         var s:nme.display.Sprite = new nme.display.Sprite();
+        var mask:nme.display.Sprite = new nme.display.Sprite();
+        mask.graphics.beginFill(0xFFFFFF);
+        mask.graphics.drawRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+        mask.graphics.endFill();
+        s.mask = mask;
         s.addChild(object);
         s.x = xTranslation;
         s.y = yTranslation;
 		_baseQueue.findQueue(z + zTranslation).drawOperations.add(new NMEDrawOperation(s, clipRect));
     }
-    
+    /*
     override private function getWidth():Int {
         return _bitmapData.width;
     }
@@ -296,5 +312,5 @@ class QueueingBitmapCanvas extends BasicCanvas {
         _bitmapData.draw(field);
         #end
     }
-    
+    */
 }

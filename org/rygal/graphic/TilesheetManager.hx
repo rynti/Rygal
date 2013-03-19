@@ -46,13 +46,7 @@ class TilesheetManager {
         tilesheets = new Array<ManagedTilesheet>();
     }
     
-    /**
-     * Allocates the given bitmap data so the identifier will be valid until you free the bitmap
-     * data.
-     * 
-     * @return  A valid identifier for the given bitmap data.
-     */
-    public function requestIdentifier(bitmapData:BitmapData):Int {
+    public function requestBitmapId(bitmapData:BitmapData):Int {
         for (i in 0...bitmapDatas.length) {
             if (bitmapDatas[i] == bitmapData) {
                 return i;
@@ -62,17 +56,11 @@ class TilesheetManager {
 		return bitmapDatas.push(bitmapData) - 1;
     }
     
-    /**
-     * Returns the bitmap data for the given identifier.
-     */
     public function getBitmapData(identifier:Int):BitmapData {
         return bitmapDatas[identifier];
     }
     
-    /**
-     * Returns the identifier for the given bitmap data or -1 if it doesn't exist.
-     */
-    public function getIdentifier(bitmapData:BitmapData):Int {
+    public function getBitmapId(bitmapData:BitmapData):Int {
         // TODO: This method may not be required!
         for (i in 0...bitmapDatas.length) {
             if (bitmapDatas[i] == bitmapData) {
@@ -86,7 +74,7 @@ class TilesheetManager {
         return tilesheets[id].requestTileRect(rectangle, centerPoint);
     }
     
-    public function get(id:Int):ManagedTilesheet {
+    public function getTilesheet(id:Int):ManagedTilesheet {
         return tilesheets[id];
     }
     

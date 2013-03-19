@@ -246,7 +246,7 @@ class Textbox extends BasicGameObject {
             new Rectangle(0 + _offset, 0, width - 2, height));
         
         if (this.focused && this._caretVisible) {
-            screen.fillRect(foregroundColor, caretX, 1, 1, height - 2);
+            screen.fillRect(foregroundColor, caretX, 1, 1, height - 2, 1);
         }
         
         screen.pop();

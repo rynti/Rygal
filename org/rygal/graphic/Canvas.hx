@@ -18,6 +18,7 @@
 
 package org.rygal.graphic;
 
+import nme.display.DisplayObject;
 import nme.display.IBitmapDrawable;
 import nme.geom.ColorTransform;
 import nme.geom.Matrix;
@@ -58,9 +59,6 @@ interface Canvas {
     
     public var zTranslation:Int;
     
-    //public var sprite:nme.display.Sprite;
-    //private var _baseQueue:DrawQueue;
-    
     public function supportsZ():Bool;
     
     public function isQueueing():Bool;
@@ -79,22 +77,21 @@ interface Canvas {
     
     public function clear(color:Int = 0):Void;
     
-    public function setPixel(x:Int, y:Int, color:Int):Void;
+    public function setPixel(x:Int, y:Int, color:Int, z:Int = 0):Void;
     
     public function draw(texture:Texture, x:Float, y:Float, z:Int = 0):Void;
     
     public function drawPart(texture:Texture, x:Float, y:Float,
             leftOffset:Float = 0, topOffset:Float = 0, rightOffset:Float = 0,
-            bottomOffset:Float = 0):Void;
+            bottomOffset:Float = 0, z:Int = 0):Void;
     
     public function fillRect(color:Int, x:Float, y:Float, width:Float,
-            height:Float):Void;
+            height:Float, z:Int = 0):Void;
     
     public function drawString(font:Font, text:String, color:Int, x:Float,
             y:Float, alignment:Int = 0, alpha:Float = 1):Void;
     
-    public function drawNmeDrawable(source:IBitmapDrawable, ?matrix:Matrix,
-            ?colorTransform:ColorTransform, ?clipRect:Rectangle):Void;
+    public function drawDisplayObject(object:DisplayObject, ?clipRect:Rectangle, z:Int = 0):Void;
     
     private function getWidth():Int;
     

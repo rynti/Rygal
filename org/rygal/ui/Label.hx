@@ -154,7 +154,10 @@ class Label extends BasicGameObject {
                     this.text = line;
                     x = this.x - Std.int(_textField.width / 2);
                     
-                    #if cpp
+                    _textField.x = x;
+                    _textField.y = y;
+                    screen.drawDisplayObject(_textField, nmeClipRect);
+                    /*#if cpp
                     screen.drawNmeDrawable(_textField,
                         new Matrix(1, 0, 0, 1, x, y), null,
                         nmeClipRect);
@@ -163,7 +166,7 @@ class Label extends BasicGameObject {
                         new Matrix(1, 0, 0, 1, x, y),
                         new ColorTransform(1, 1, 1, this.alpha),
                         nmeClipRect);
-                    #end
+                    #end*/
                     
                     y += _textField.textHeight;
                 }
@@ -174,7 +177,10 @@ class Label extends BasicGameObject {
                 if (this.alignment == Font.RIGHT) {
                     x -= _textField.width;
                 }
-                #if cpp
+                _textField.x = x;
+                _textField.y = y;
+                screen.drawDisplayObject(_textField, nmeClipRect);
+                /*#if cpp
                 screen.drawNmeDrawable(_textField,
                     new Matrix(1, 0, 0, 1, x, y), null,
                     nmeClipRect);
@@ -183,7 +189,7 @@ class Label extends BasicGameObject {
                     new Matrix(1, 0, 0, 1, x, y),
                     new ColorTransform(1, 1, 1, this.alpha),
                     nmeClipRect);
-                #end
+                #end*/
             }
             
         } else {
@@ -223,14 +229,17 @@ class Label extends BasicGameObject {
                     this.text = line;
                     x = this.x - Std.int(_textField.width / 2);
                     
-                    #if cpp
+                    _textField.x = x;
+                    _textField.y = y;
+                    screen.drawDisplayObject(_textField);
+                    /*#if cpp
                     screen.drawNmeDrawable(_textField,
                         new Matrix(1, 0, 0, 1, x, y));
                     #else
                     screen.drawNmeDrawable(_textField,
                         new Matrix(1, 0, 0, 1, x, y),
                         new ColorTransform(1, 1, 1, this.alpha));
-                    #end
+                    #end*/
                     
                     y += _textField.textHeight;
                 }
@@ -241,14 +250,17 @@ class Label extends BasicGameObject {
                 if (this.alignment == Font.RIGHT) {
                     x -= _textField.width;
                 }
-                #if cpp
+                _textField.x = x;
+                _textField.y = y;
+                screen.drawDisplayObject(_textField);
+                /*#if cpp
                 screen.drawNmeDrawable(_textField,
                     new Matrix(1, 0, 0, 1, x, y));
                 #else
                 screen.drawNmeDrawable(_textField,
                     new Matrix(1, 0, 0, 1, x, y),
                     new ColorTransform(1, 1, 1, this.alpha));
-                #end
+                #end*/
             }
             
         } else {

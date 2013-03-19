@@ -1,4 +1,5 @@
 package org.rygal.graphic;
+import nme.display.DisplayObject;
 import nme.display.IBitmapDrawable;
 import nme.geom.ColorTransform;
 import nme.geom.Matrix;
@@ -121,7 +122,7 @@ class BasicCanvas implements Canvas {
      * @param   y       The y-coordinate of the pixel.
      * @param   color   The color of the pixel.
      */
-    public function setPixel(x:Int, y:Int, color:Int):Void { }
+    public function setPixel(x:Int, y:Int, color:Int, z:Int = 0):Void { }
     
     /**
      * Draws the given texture onto this canvas.
@@ -146,7 +147,7 @@ class BasicCanvas implements Canvas {
      */
     public function drawPart(texture:Texture, x:Float, y:Float,
             leftOffset:Float = 0, topOffset:Float = 0, rightOffset:Float = 0,
-            bottomOffset:Float = 0):Void { }
+            bottomOffset:Float = 0, z:Int = 0):Void { }
     
     /**
      * Draw a filled rectangle onto this canvas with the given properties.
@@ -158,7 +159,7 @@ class BasicCanvas implements Canvas {
      * @param   height  The height of the rectangle.
      */
     public function fillRect(color:Int, x:Float, y:Float, width:Float,
-            height:Float):Void { }
+            height:Float, z:Int = 0):Void { }
     
     /**
      * Returns a texture that uses the same bitmap data, thus when you change
@@ -212,12 +213,10 @@ class BasicCanvas implements Canvas {
      * unless you really have to!
      * 
      * @param   source          The drawable object to draw on this canvas.
-     * @param   ?matrix         A matrix for object transformations.
-     * @param   ?colorTransform A color transformation.
      * @param   ?clipRect       A clipping rectangle.
+     * @param   z               The z-coordinate.
      */
-    public function drawNmeDrawable(source:IBitmapDrawable, ?matrix:Matrix,
-            ?colorTransform:ColorTransform, ?clipRect:Rectangle):Void { }
+    public function drawDisplayObject(object:DisplayObject, ?clipRect:Rectangle, z:Int = 0):Void { }
     
     
     /**

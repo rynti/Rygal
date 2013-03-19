@@ -1,6 +1,7 @@
 package org.rygal.graphic;
 
 import nme.display.BitmapData;
+import nme.display.DisplayObject;
 import nme.display.IBitmapDrawable;
 import nme.display.Tilesheet;
 import nme.geom.ColorTransform;
@@ -82,7 +83,7 @@ class BitmapCanvas extends BasicCanvas {
             _drawPoint, null, null, true);
     }
     
-    override public function setPixel(x:Int, y:Int, color:Int):Void {
+    override public function setPixel(x:Int, y:Int, color:Int, z:Int = 0):Void {
         x += Std.int(xTranslation);
         y += Std.int(yTranslation);
         if (inBitmap(x, y)) {
@@ -92,7 +93,7 @@ class BitmapCanvas extends BasicCanvas {
     
     override public function drawPart(texture:Texture, x:Float, y:Float,
             leftOffset:Float = 0, topOffset:Float = 0, rightOffset:Float = 0,
-            bottomOffset:Float = 0):Void {
+            bottomOffset:Float = 0, z:Int = 0):Void {
         
         if (texture == null)
             return;
@@ -111,7 +112,7 @@ class BitmapCanvas extends BasicCanvas {
     }
     
     override public function fillRect(color:Int, x:Float, y:Float, width:Float,
-            height:Float):Void {
+            height:Float, z:Int = 0):Void {
         
         x += xTranslation;
         y += yTranslation;
@@ -122,9 +123,8 @@ class BitmapCanvas extends BasicCanvas {
         return new Texture(_bitmapData);
     }
     
-    override public function drawNmeDrawable(source:IBitmapDrawable, ?matrix:Matrix,
-            ?colorTransform:ColorTransform, ?clipRect:Rectangle):Void {
-        
+    override public function drawDisplayObject(object:DisplayObject, ?clipRect:Rectangle, z:Int = 0):Void {
+        /*
         if (matrix == null) {
             _bitmapData.draw(source, new Matrix(1, 0, 0, 1, xTranslation,
                 yTranslation), colorTransform, null, clipRect);
@@ -133,7 +133,7 @@ class BitmapCanvas extends BasicCanvas {
             var m:Matrix = matrix.clone();
             m.translate(xTranslation, yTranslation);
             _bitmapData.draw(source, m, colorTransform, null, clipRect);
-        }
+        }*/
     }
     
     override private function getWidth():Int {
